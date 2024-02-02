@@ -14,6 +14,8 @@ async function test () {
     console.log({count1})
     // sleep(3000)
 
+    await sleep(3000)
+
     const count2 = 5+7
 
     console.log({count2})
@@ -21,7 +23,9 @@ async function test () {
     return 'done'
 }
 
-console.log(test ())
+// console.log(test ())
+
+test()
 
 // const requestToServer = async () => {
 //     await sleep(6000)
