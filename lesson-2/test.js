@@ -21,7 +21,7 @@ Promise.resolve()
         process.nextTick(() => console. log('Promise Next Tick'));// 5         //H
     })
 
-fu
+
 
 process.nextTick(() => console. log('Next Tick')); //3                         //I
 setTimeout ( () => console. log('setTimeout 2'), 0);//                  //J
