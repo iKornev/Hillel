@@ -6,3 +6,7 @@ const buffer = Buffer.concat([b1, b2, b3]);
 
 console.log(buffer);
 console.log(buffer.toString());
+
+const b4 = Buffer.alloc(10).fill('');
+
+console.log({ b4: b4.toString() });

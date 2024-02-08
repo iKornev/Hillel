@@ -15,6 +15,12 @@ app.get('/testRoute', (req, res) => {
 });
 
 app.post('/testpost', (req, res) => {
+
+req.on('data', (chunk) => {
+        console.log({ data: chunk });
+    });
+
+    console.log({req})
     console.log('post route completed ');
 
     res.json({

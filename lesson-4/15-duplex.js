@@ -1,9 +1,9 @@
 import fs from 'fs'
 import zlib from 'zlib'
 
-const readStream = fs.createReadStream('text.txt', 'utf8');
+const readStream = fs.createReadStream('text4.txt', 'utf8');
 const writeStream = fs.createWriteStream('new-text','utf8')
-// const compressStream = zlib.createGzip();
+const compressStream = zlib.createGzip();
 
 // readStream.on('data', (chunk) => {
 //   console.log('---------');
@@ -13,6 +13,8 @@ const writeStream = fs.createWriteStream('new-text','utf8')
 //   writeStream.write('\n ---CHUNK END--- \n');
 // });
 
+
+
 const handleError = () => {
     console.log('Error');
     readStream.destroy();
@@ -21,6 +23,6 @@ const handleError = () => {
 
 readStream
     .on('error', handleError)
-    // .pipe(compressStream)
+    .pipe(compressStream)
     .pipe(writeStream)
     .on('error', handleError);
