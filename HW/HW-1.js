@@ -39,14 +39,13 @@ const users = [
 
 function authenticateUser(username, password) {
     return new Promise((resolve, reject) => {
-
-        const user = users.find(user => user.username === username && user.password === password)
-
-        if (user) {
-            resolve(user);
-        } else {
-            reject(new Error('User not found or password is invalid'));
+        for (const user of users) {
+            if (user.username === username && user.password === password) {
+                return resolve(user);
+            }
         }
+
+        return reject(new Error('Username and Password are invalid!'));
     });
 }
 

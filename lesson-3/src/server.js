@@ -7,8 +7,10 @@ app.use(express.json());
 app.get('/testRoute', (req, res) => {
     console.log('get route completed ');
 
+    const user = {}
+
     res.json({
-        data: 'Hello world'
+        data: user
     })
 });
 
