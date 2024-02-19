@@ -7,7 +7,7 @@ const outputStream = fs.createWriteStream('output.txt', 'utf8');
 
 const transformStream = new Transform({
     transform(chunk, encoding, callback) {
-        const transformedData = chunk.toString().toUpperCase(); // Пример преобразования (в верхний регистр)
+        const transformedData = chunk.toString().toUpperCase();
         callback(null, transformedData);
     }
 });
