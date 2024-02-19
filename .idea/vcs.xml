@@ -2,5 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/g/Hillel_Node" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test hw/hillel_nodejs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test hw/qqerwerqw/studies-nodejs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test hw/wewafd/node_learning" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test/studies-nodejs" vcs="Git" />
   </component>
 </project>
