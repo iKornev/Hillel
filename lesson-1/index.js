@@ -10,7 +10,9 @@ app.get('/', function (req, res) {
     res.send('hello world')
 })
 
-app.post('/post', function (req, res, next) {
+app.get('/user')
+
+    app.post('/users', function (req, res, next) {
 
     console.log({body: req.body})
     console.log('post endpoint completed')
@@ -22,3 +24,10 @@ app.delete('/delete', () => {})
 app.listen(3000,() => {
     console.log('App listening on port 3000')
 })
+
+const resp = {
+    status: 200,
+    data : {
+
+    }
+}
