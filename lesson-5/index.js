@@ -12,15 +12,27 @@ app.use(expressStatusMonitor());
 app.get('/status',  expressStatusMonitor().pageRoute)
 
 app.post('/upload', async(req, res) => {
-    const contentLength = req.headers['content-length']; // Размер загружаемого контента
-    const maxSizeBite = 25000000
+    let contentLength = 0; // Initialize content length counter
+    const maxSizeBytes = 19000000;
 
-    console.log({contentLength})
-    if (contentLength > maxSizeBite) {
-        // Если размер файла превышает максимальный размер, возвращаем ошибку
-        res.status(400).send('File size exceeds the limit');
-        return;
-    }
+    req.on('data', (chunk) => {
+        // Accumulate the size of each chunk
+        contentLength += chunk.length;
+
+        console.log({contentLength})
+        if (contentLength > maxSizeBytes) {
+            // If the accumulated size exceeds the maximum limit, return an error
+            res.status(400).send('File size exceeds the limit');
+            req.destroy(); // Close the request stream to stop receiving data
+        }
+    });
+
+
+    // if (contentLength > maxSizeBytes) {
+    //     // Если размер файла превышает максимальный размер, возвращаем ошибку
+    //     res.status(400).send('File size exceeds the limit');
+    //     return;
+    // }
 
     const writableStream = new Writable({
         async write(chunk, encoding, cb) {

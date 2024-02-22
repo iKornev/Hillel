@@ -21,6 +21,14 @@ userRouter.post('/user', validator(userCreateValidationSchema), async (req, res)
 
     const {password, username} = req.body
 
+    // const obj = {
+    //     username: "john_doe",
+    //     email: "john@example.com",
+    //     password: "qwery123"
+    // }
+
+
+
 
     const saltRounds = 10;
     const result = await bcrypt.hash(password, saltRounds)
