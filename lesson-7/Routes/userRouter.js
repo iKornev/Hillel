@@ -28,8 +28,6 @@ userRouter.post('/user', validator(userCreateValidationSchema), async (req, res)
     // }
 
 
-
-
     const saltRounds = 10;
     const result = await bcrypt.hash(password, saltRounds)
 

@@ -3,49 +3,39 @@ import { validator } from "../middleware/unifyValidator.js";
 import  { userSignUpSchema, userSignInSchema } from "../validationSchemas/userValidationSchemas.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { jwtConfig } from '../config/jwt-config.js'
+import { jwtConfig } from '../config/jwt-cofig.js'
 import passport from 'passport'
+import User from '../Models/User.js'
 
 const userRouter = new Router()
 
 const users = [];
 
 
-userRouter.post('/signup', async (req, res) => {
+userRouter.post('/signup', validator(userSignUpSchema), async (req, res) => {
 
     const existingUser = users.find(user => user.username === req.body.username);
     if (existingUser) return res.status(400).send({ error: 'User already exists' });
 
-    const TOKEN_EXP_IN_SECOUND = 3600
-
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        const user = {
-            id: users.length + 1,
-            username: req.body.username,
+        const userData = {
+            login: req.body.username,
             email: req.body.email,
             password: hashedPassword
         };
-        users.push(user);
+        const user = await User.create(userData)
 
-        // const token = jwt.sign(
-        //     {
-        //         email: user.email,
-        //         userId: user.id,
-        //     },
-        //     jwtConfig,
-        //     { expiresIn: TOKEN_EXP_IN_SECOUND },
-        // )
-
+        console.log({user})
 
         const token = jwt.sign(
             {
-                userId: '222',
-                roles: '12'
+                email: user.email,
+                userId: user.id,
             },
             jwtConfig,
-            { expiresIn: TOKEN_EXP_IN_SECOUND },
+            { expiresIn: 3600 },
         )
 
         res.status(201).json({
@@ -66,19 +56,32 @@ userRouter.post('/signin', validator(userSignInSchema), async (req, res) => {
         if (!result) {
             return res.status(401).send({ error: 'Invalid username or password' });
         }
-        res.status(200).send({ message: 'Authentication successful' });
+
+        const token = jwt.sign(
+            {
+                login: user.login,
+                userId: user.id,
+            },
+            jwtConfig,
+            { expiresIn: 3600 },
+        )
+        res.status(201).json({
+            token: `Bearer ${token}`,
+        })
     } catch (error) {
         res.status(500).send({ error: 'Internal server error' });
     }
 });
 
-userRouter.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
-
-    const { user } = req
-    res.json({
-        user
+userRouter.get('/me', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const user = await User.findByPk(req.user.id, {
+        attributes: { exclude: ['password'] },
     })
-})
+
+    res.status(201).json({
+        user,
+    })
+});
 
 
 

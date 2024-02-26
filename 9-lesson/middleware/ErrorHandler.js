@@ -1,8 +1,7 @@
 function ErrorHandler (err, req, res, next) {
     if (err) {
-        console.log(err.message, err.status)
-
-        res.status(err.status).json({
+        console.log(err.message)
+        res.json({
             erreorMessage: err.message
         })
     }
