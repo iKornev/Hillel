@@ -1,0 +1,87 @@
+import { Router } from 'express';
+import { validator } from "../middleware/unifyValidator.js";
+import  { userSignUpSchema, userSignInSchema } from "../validationSchemas/userValidationSchemas.js";
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { jwtConfig } from '../config/jwt-config.js'
+import passport from 'passport'
+
+const userRouter = new Router()
+
+const users = [];
+
+
+userRouter.post('/signup', async (req, res) => {
+
+    const existingUser = users.find(user => user.username === req.body.username);
+    if (existingUser) return res.status(400).send({ error: 'User already exists' });
+
+    const TOKEN_EXP_IN_SECOUND = 3600
+
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        const user = {
+            id: users.length + 1,
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        };
+        users.push(user);
+
+        // const token = jwt.sign(
+        //     {
+        //         email: user.email,
+        //         userId: user.id,
+        //     },
+        //     jwtConfig,
+        //     { expiresIn: TOKEN_EXP_IN_SECOUND },
+        // )
+
+
+        const token = jwt.sign(
+            {
+                userId: '222',
+                roles: '12'
+            },
+            jwtConfig,
+            { expiresIn: TOKEN_EXP_IN_SECOUND },
+        )
+
+        res.status(201).json({
+            token: `Bearer ${token}`,
+        })
+    } catch (error) {
+        res.status(500).send({ error: 'Error hashing password' });
+    }
+})
+
+userRouter.post('/signin', validator(userSignInSchema), async (req, res) => {
+    console.log({ users })
+    const user = users.find(user => user.username === req.body.username);
+    if (!user) return res.status(401).send({ error: 'Invalid username or password' });
+
+    try {
+        const result = await bcrypt.compare(req.body.password, user.password);
+        if (!result) {
+            return res.status(401).send({ error: 'Invalid username or password' });
+        }
+        res.status(200).send({ message: 'Authentication successful' });
+    } catch (error) {
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
+userRouter.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    const { user } = req
+    res.json({
+        user
+    })
+})
+
+
+
+
+
+export { userRouter }
