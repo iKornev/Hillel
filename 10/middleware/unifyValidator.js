@@ -1,5 +1,7 @@
 const validator = (validationSchema) => (req, res ,next) => {
 
+    console.log({body: req.body})
+
     const { body } = req
     const validationResult = validationSchema.validate(body)
 
