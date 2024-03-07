@@ -5,11 +5,12 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { jwtConfig } from '../config/jwt-cofig.js'
 import passport from 'passport'
-import User from '../Models/User.js'
+import { User } from "../Models/User.js";
 
 const userRouter = new Router()
 
 const users = [];
+
 
 
 userRouter.post('/signup', validator(userSignUpSchema), async (req, res) => {
@@ -21,10 +22,11 @@ userRouter.post('/signup', validator(userSignUpSchema), async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         const userData = {
-            login: req.body.username,
+            username: req.body.username,
             email: req.body.email,
             password: hashedPassword
         };
+
         const user = await User.create(userData)
 
         console.log({user})
@@ -42,7 +44,7 @@ userRouter.post('/signup', validator(userSignUpSchema), async (req, res) => {
             token: `Bearer ${token}`,
         })
     } catch (error) {
-        res.status(500).send({ error: 'Error hashing password' });
+        console.log({error: error.message})
     }
 })
 
@@ -74,13 +76,11 @@ userRouter.post('/signin', validator(userSignInSchema), async (req, res) => {
 });
 
 userRouter.get('/me', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const user = await User.findByPk(req.user.id, {
-        attributes: { exclude: ['password'] },
-    })
 
-    res.status(201).json({
-        user,
-    })
+
+   res.json({
+       data: req.user
+   })
 });
 
 
