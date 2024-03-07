@@ -11,10 +11,13 @@ const uri = "mongodb://localhost:27017";
 const client = new MongoClient(uri)
 let database;
 
+
+
+
 async function run() {
     try {
 
-        database = client.db("movies");
+        database = client.db("films");
 
     } catch (e) {
         await client.close();
@@ -25,10 +28,13 @@ run().then(() => {console.log('connected')})
 
 
 const app = express()
+app.use(express.json())
 app.post('/insert', async (req,res, next) => {
 
 
-    const movies = database.collection("movies");
+    const movies = database.collection("films");
+
+    const data = req.body
 
     // Create a document to insert
     const doc = {
@@ -36,7 +42,7 @@ app.post('/insert', async (req,res, next) => {
         content: "No bytes, no problem. Just insert a document, in MongoDB",
     }
     // Insert the defined document into the "haiku" collection
-    const result = await movies.insertOne(doc);
+    const result = await movies.insertOne(data);
 
     res.json({result})
 
