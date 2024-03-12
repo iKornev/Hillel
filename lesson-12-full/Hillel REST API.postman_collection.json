@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "7c485f7b-c7b8-4691-8f0d-36a4ec630d11",
+		"name": "Hillel REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31532256"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"if (jsonData && jsonData.data) { ",
+									"    let accessToken = jsonData.accessToken;",
+									" ",
+									"    pm.collectionVariables.set(\"TOKEN\", `${accessToken}`);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"username\" : \"test user\",\n    \"password\": \"qwerty123\",\n    \"email\": \"11testemail@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "User SignIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"if (jsonData && jsonData.data) { ",
+									"    let accessToken = jsonData.accessToken;",
+									" ",
+									"    pm.collectionVariables.set(\"TOKEN\", `${accessToken}`);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"password\": \"qwerty123\",\n    \"email\": \"11testemail@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/signin"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Create New Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \"some data\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/post"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjExdGVzdGVtYWlsQGdtYWlsLmNvbSIsInVzZXJJZCI6IjY1ZWY0MDllYmE0MDkxYTQ1ODNkNGIwNCIsImlhdCI6MTcxMDE3ODQ2MywiZXhwIjoxNzEwMTgyMDYzfQ.0z8_vVBHDUXIWdMbjhmoDUCi1tsb7BZTDw5E6pJ53rI",
+			"type": "string"
+		}
+	]
+}
